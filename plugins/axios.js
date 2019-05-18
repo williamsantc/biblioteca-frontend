@@ -9,8 +9,8 @@ export default function ({
 }) {
 
   const httpInstance = axios.create({
-    baseURL: process.env.rootUrl,
-    rootURL: process.env.baseUrl,
+    baseURL: process.env.baseUrl,
+    rootURL: process.env.rootURL,
   })
 
   httpInstance.interceptors.request.use(config => {

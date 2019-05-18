@@ -20,7 +20,8 @@ export default {
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Raleway&display=swap'}
     ]
   },
 
@@ -33,7 +34,8 @@ export default {
    */
   css: [
     '~/node_modules/font-awesome/css/font-awesome.min.css',
-    '~/node_modules/simple-line-icons/css/simple-line-icons.css'
+    '~/node_modules/simple-line-icons/css/simple-line-icons.css',
+    '~/assets/css/styles.css'
   ],
 
   /*

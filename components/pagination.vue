@@ -5,14 +5,14 @@
       v-model="auxCurrentPage"
       class="mx-1 mb-0 danger"
       :per-page="perPage"
-    ></b-pagination>
+    />
     <div class="mx-2 text-center my-3 my-md-0">
-      <b>{{currentRowsShowing()}}</b>
+      <b>{{ currentRowsShowing() }}</b>
     </div>
     <div class="mx-1">
       <b-form inline class="d-flex justify-content-center">
         <label for="selectorPages" class="mr-2">Filas Por Página:</label>
-        <b-select id="selectorPages" :options="listPerPage" v-model="auxPerPage"></b-select>
+        <b-select id="selectorPages" :options="listPerPage" v-model="auxPerPage" />
       </b-form>
     </div>
   </div>
@@ -54,6 +54,10 @@ export default {
       this.$emit('input', newValue)
     }
   },
+  created: function () {
+    this.auxCurrentPage = this.value
+    this.auxPerPage = this.perPage
+  },
   methods: {
     currentRowsShowing: function () {
       let lastRowShowing = this.value * this.perPage
@@ -61,10 +65,6 @@ export default {
       lastRowShowing = lastRowShowing < this.totalRows ? lastRowShowing : this.totalRows
       return firstRowShowing + ' - ' + lastRowShowing + ' de ' + this.totalRows
     }
-  },
-  created: function () {
-    this.auxCurrentPage = this.value
-    this.auxPerPage = this.perPage
   }
 }
 </script>
