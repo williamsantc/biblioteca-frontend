@@ -10,8 +10,8 @@ const production = {
 
 const development = {
   ...production, // spread,
-  rootUrl: `http://${ip}:8084/`,
-  baseUrl: `http://${ip}:8084/biblioteca/`
+  rootUrl: `http://${ip}:8090/`,
+  baseUrl: `http://${ip}:8090/`
 }
 
 export default {

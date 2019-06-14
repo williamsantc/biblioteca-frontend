@@ -23,8 +23,13 @@
           <b-btn variant="danger" size="sm" @click="eliminar(data.item.librId)" title="Eliminar">
             <i class="fa fa-trash" aria-hidden="true" />
           </b-btn>
+         
+          <b-btn variant="secondary" size="sm" @click="crudSettings.showModal = !crudSettings.showModal" title="Modificar">
+            <i class="fa fa-cog" aria-hidden="true" />
+          </b-btn>
         </template>
       </b-table>
+      
       <pagination
         :total-rows="listaLibros.length"
         v-model="currentPage"
@@ -33,7 +38,17 @@
         @per-page-chaged="perPage = $event"
       />
     </div>
+    
     <b-modal v-model="crudSettings.showModal" :title="tituloFuncionalidad">
+      <b-form-group label="ID">
+        <b-input
+          placeholder="ID del libro"
+          ref="librId"
+          @keydown.native="validarCantidadCaracteres($event, payload.form.librId, 50)"
+          v-model="payload.form.librId"
+        />
+      </b-form-group>
+
       <b-form-group label="ISBN">
         <b-input
           placeholder="ISBN del libro"
@@ -42,12 +57,21 @@
           v-model="payload.form.librIsbn"
         />
       </b-form-group>
+     
       <b-form-group label="Nombre">
         <b-input
           v-model="payload.form.librNombre"
           placeholder="Nombre del libro"
           ref="librNombre"
           @keydown.native="validarCantidadCaracteres($event, payload.form.librNombre, 50)"
+        />
+      </b-form-group>
+
+      <b-form-group label="Ejemplares">
+        <b-input
+          v-model="payload.form.librCantejemplares"
+          placeholder="Cantidad de ejemplares"
+          ref="librCantejemplares"
         />
       </b-form-group>
       <div slot="modal-footer">
@@ -65,6 +89,7 @@ import Pagination from '@/components/pagination'
 /* import _ from 'lodash' */
 
 const FIELDS_LIBRO = [
+  { key: 'librId', label:'ID'},
   { key: 'librIsbn', label: 'ISBN' },
   { key: 'librNombre', label: 'Nombre' },
   { key: 'librCantejemplares', label: 'Ejemplares' },
@@ -79,6 +104,12 @@ const PAYLOAD = {
     librCantejemplares: ''
   },
   config: {
+    librId:{
+      type:'Integer',
+      required:true,
+      limite:50,
+      msg:'ID del libro'
+    },
     librIsbn: {
       type: 'String',
       required: true,
@@ -90,6 +121,11 @@ const PAYLOAD = {
       limite: 50,
       required: true,
       msg: 'Nombre del Libro'
+    },
+    librCantejemplares:{
+      type: 'String',
+      required: true,
+      msg: 'Cantidad de ejemplares'
     }
   }
 }
@@ -111,6 +147,7 @@ export default {
     this.getLibrosWs()
   },
   methods: {
+
     getLibrosWs: async function() {
       try {
         this.listaLibros = (await this.$http.get('/api/libro/list')).data
@@ -129,7 +166,7 @@ export default {
           '/api/libro/register',
           this.payload.form
         )).data
-        this.$toast.success(resp.message)
+        this.$toast.success(resp.msg)
         await this.getLibrosWs()
         this.crudSettings.showModal = !this.crudSettings.showModal
       } catch (error) {
@@ -160,12 +197,24 @@ export default {
         let resp = (await this.$http.post('/api/libro/del', {
           librId: librId
         })).data
-        this.$toast.success(resp.message)
+        this.$toast.success(resp.msg)
       } catch (error) {
         this.$toast.error(error.response.data.error)
       }
 
       await this.getLibrosWs()
+    },
+    modificar: async function(librId){
+      try {
+        let resp = (await this.$http.post('/api/libro/mofi', {
+          librId: librId
+        })).data
+      
+        this.$toast.success(resp.msg)
+      } catch (error) {
+        this.$toast.error(error.response.data.error)
+      }
+
     }
   }
 }
